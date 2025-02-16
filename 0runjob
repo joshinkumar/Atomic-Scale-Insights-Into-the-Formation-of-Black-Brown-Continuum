@@ -1,0 +1,34 @@
+#!/bin/bash
+#SBATCH -J runjob_task_name             # Specify name of the job
+#SBATCH -o vasp.out                   # Results output
+#SBATCH -e vasp.err                   # Error summaries
+#SBATCH -p icx                    # Specify the node
+#SBATCH -N 1                          # Number of nodes requested
+#SBATCH -n 64                         # Total number of MPI tasks or Cores
+#SBATCH -A TG-DMR160007                     # Specify the project number (You don't need to change this)
+#SBATCH -t 24:00:00                   # Specify computation time you want to request [Max: 48:00:00 hrs for Expanse]
+#SBATCH --mem=249208M
+
+# Notes:
+# Don't request more memory (using SBATCH--mem=249325M) as the default 1 GB/core is usually enough (check OUTCAR).
+
+# Instructions to run VASP: 
+# 1. Save this runjob file in folder where you are running VASP (either via ASE (need POSCAR PyScript.py) or directly (need INCAR POSCAR POTCAR KPOINTS)
+# 2. Run the runjob file: sbatch runjob
+
+#Load module file(s) into the shell environment
+#module purge
+#module load cpu/0.15.4
+#module load slurm
+#module load intel/19.1.1.217
+#module load intel-mkl/2019.1.144
+#module load intel-mpi/2019.8.254
+
+# For Stampede
+module --force purge
+module load intel/23.1
+module load impi/21.9
+
+# RUN THE SIMULATIONS WITH VIA DIRECTLY USING VASP OR VIA ASE
+#mpirun -np 64 /home/joshinkumar/VASP_Setup_Files/VASP_EXE/vasp_std
+/home1/09900/joshinkumar/anaconda3/envs/my_pymatgen/bin/python ASE_PyScript.py >> stdout
